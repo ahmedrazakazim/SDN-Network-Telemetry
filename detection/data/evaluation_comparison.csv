@@ -1,0 +1,13 @@
+Metric,Baseline_EWMA,Isolation_Forest
+Precision,1.0,0.9656
+Recall,1.0,1.0
+F1 Score,1.0,0.9825
+False Positive Rate (FPR),0.0,0.037
+Inference Latency Mean (μs),7.3,5077.56
+Inference Latency Std (μs),1.75,424.48
+Inference Latency Median (μs),6.74,4987.8
+Inference Latency P99 (μs),15.97,6987.47
+True Positives (TP),1040.0,1040.0
+False Positives (FP),0.0,37.0
+True Negatives (TN),1000.0,963.0
+False Negatives (FN),0.0,0.0

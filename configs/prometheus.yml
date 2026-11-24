@@ -1,0 +1,18 @@
+# Prometheus Configuration for SDN Network Telemetry
+# Scrapes metrics from the os-ken OpenFlow controller telemetry exporter at 127.0.0.1:8000
+
+global:
+  scrape_interval: 1s
+  evaluation_interval: 1s
+  scrape_timeout: 1s
+
+scrape_configs:
+  - job_name: "sdn_controller"
+    metrics_path: "/metrics"
+    scheme: "http"
+    static_configs:
+      - targets:
+          - "127.0.0.1:8000"
+        labels:
+          environment: "sdn-emulation"
+          subsystem: "controller-telemetry"

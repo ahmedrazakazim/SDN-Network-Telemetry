@@ -1,0 +1,14 @@
+apiVersion: 1
+
+providers:
+  - name: "SDN Telemetry Dashboards"
+    orgId: 1
+    folder: "SDN Telemetry & Anomaly Detection"
+    folderUid: "sdn-telemetry"
+    type: file
+    disableDeletion: false
+    updateIntervalSeconds: 5
+    allowUiUpdates: true
+    options:
+      path: /home/zen/cn-project/monitoring/grafana/dashboards
+      foldersFromFilesStructure: false

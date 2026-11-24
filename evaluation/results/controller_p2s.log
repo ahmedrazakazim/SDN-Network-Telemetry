@@ -1,0 +1,38 @@
+/home/zen/CN Project/controller/sdn_controller.py:2: EventletDeprecationWarning: 
+Eventlet is deprecated. It is currently being maintained in bugfix mode, and
+we strongly recommend against using it for new projects.
+
+If you are already using Eventlet, we recommend migrating to a different
+framework.  For more detail see
+https://eventlet.readthedocs.io/en/latest/asyncio/migration.html
+
+  import eventlet
+1 RLock(s) were not greened, to fix this error make sure you run eventlet.monkey_patch() before importing any other modules.
+2026-11-24 21:36:44,914 [INFO] os_ken.base.app_manager: loading app os_ken.controller.ofp_handler
+2026-11-24 21:36:44,914 [INFO] os_ken.base.app_manager: loading app controller.sdn_controller
+2026-11-24 21:36:44,914 [INFO] os_ken.base.app_manager: loading app os_ken.controller.ofp_handler
+2026-11-24 21:36:44,914 [INFO] os_ken.base.app_manager: instantiating app os_ken.controller.ofp_handler of OFPHandler
+2026-11-24 21:36:44,915 [INFO] os_ken.base.app_manager: instantiating app controller.sdn_controller of SDNController
+2026-11-24 21:36:44,918 [INFO] SDNController: Loaded configuration from /home/zen/CN Project/configs/sdn_config.yaml
+2026-11-24 21:36:45,783 [INFO] telemetry.exporter: Prometheus telemetry exporter running at http://0.0.0.0:8000/metrics
+2026-11-24 21:36:45,783 [INFO] SDNController: Prometheus telemetry exporter listening at http://0.0.0.0:8000/metrics
+2026-11-24 21:36:45,783 [INFO] SDNController: StatisticalAnomalyDetector initialized and wired to telemetry
+2026-11-24 21:36:45,799 [INFO] SDNController: IsolationForestAnomalyDetector loaded from /home/zen/CN Project/detection/models/isolation_forest.joblib
+2026-11-24 21:36:45,800 [INFO] mitigation_engine: Initialized MitigationEngine (priority=1000, default_timeout=300s, protected_hosts={'10.0.0.3', '10.0.0.4'})
+2026-11-24 21:36:45,800 [INFO] SDNController: MitigationEngine initialized
+2026-11-24 21:36:45,800 [INFO] telemetry.collector: Telemetry polling loop started with interval=2.00s
+2026-11-24 21:36:45,800 [INFO] telemetry.collector: Spawned telemetry monitor greenlet
+2026-11-24 21:36:45,800 [INFO] SDNController: TelemetryCollector registered and polling loop started (interval=2.0s)
+2026-11-24 21:36:45,800 [INFO] SDNController: Initialized SDNController with backend: os_ken
+2026-11-24 21:36:46,154 [INFO] SDNController: Switch connected: DPID=1
+2026-11-24 21:36:46,155 [INFO] controller.flow_manager: Installing table-miss entry on datapath 1
+2026-11-24 21:36:46,155 [INFO] SDNController: Switch connected: DPID=3
+2026-11-24 21:36:46,155 [INFO] controller.flow_manager: Installing table-miss entry on datapath 3
+2026-11-24 21:36:46,156 [INFO] SDNController: Switch connected: DPID=2
+2026-11-24 21:36:46,156 [INFO] controller.flow_manager: Installing table-miss entry on datapath 2
+2026-11-24 21:37:11,986 [WARNING] SDNController: [ML ANOMALY] Host 10.0.0.1 flagged by IsolationForest (score=0.0490, latency=5864.1us)
+2026-11-24 21:37:11,986 [WARNING] SDNController: [ML ANOMALY] Host 10.0.0.2 flagged by IsolationForest (score=0.0499, latency=5864.1us)
+2026-11-24 21:37:23,928 [WARNING] SDNController: [ML ANOMALY] Host 10.0.0.1 flagged by IsolationForest (score=0.0010, latency=5731.1us)
+2026-11-24 21:37:23,929 [WARNING] SDNController: [ML ANOMALY] Host 10.0.0.2 flagged by IsolationForest (score=0.0018, latency=5731.1us)
+2026-11-24 21:37:25,930 [WARNING] SDNController: [ML ANOMALY] Host 10.0.0.1 flagged by IsolationForest (score=0.0034, latency=5576.5us)
+2026-11-24 21:37:25,931 [WARNING] SDNController: [ML ANOMALY] Host 10.0.0.2 flagged by IsolationForest (score=0.0042, latency=5576.5us)

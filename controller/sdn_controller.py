@@ -135,6 +135,7 @@ class SDNController(BASE_APP):
         self.telemetry_collector = None
         self.mitigation_engine = None
         self.anomaly_detector = None
+        self.ml_detector = None
         self.exporter = None
         self.config: Dict[str, Any] = {}
 
@@ -166,6 +167,23 @@ class SDNController(BASE_APP):
         except Exception as e:
             logger.warning(f"Could not initialize anomaly detector: {e}")
 
+        # 2b. Instantiate Isolation Forest ML Anomaly Detector
+        try:
+            from detection.ml_detector import IsolationForestAnomalyDetector
+            ml_cfg = self.config.get("detection", {}).get("ml", {})
+            rel_model_path = ml_cfg.get("model_path", "detection/models/isolation_forest.joblib")
+            project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+            model_path = rel_model_path if os.path.isabs(rel_model_path) else os.path.join(project_root, rel_model_path)
+            if os.path.exists(model_path):
+                self.ml_detector = IsolationForestAnomalyDetector(model_path=model_path)
+                if getattr(self.ml_detector, "model", None) is not None:
+                    self.ml_detector.model.n_jobs = 1
+                logger.info(f"IsolationForestAnomalyDetector loaded from {model_path}")
+            else:
+                logger.warning(f"ML model file not found at {model_path}; live ML scoring disabled")
+        except Exception as e:
+            logger.warning(f"Could not initialize ML detector: {e}")
+
         # 3. Instantiate Mitigation Engine
         try:
             from mitigation.mitigation_engine import MitigationEngine
@@ -178,7 +196,7 @@ class SDNController(BASE_APP):
         # 4. Instantiate Telemetry Collector and start monitoring loop
         try:
             from telemetry.collector import TelemetryCollector
-            poll_interval = self.config.get("telemetry", {}).get("default_poll_interval", 1.0)
+            poll_interval = float(os.environ.get("SDN_POLL_INTERVAL", self.config.get("telemetry", {}).get("default_poll_interval", 1.0)))
             self.telemetry_collector = TelemetryCollector(
                 datapaths=self.datapaths,
                 poll_interval=poll_interval,
@@ -581,6 +599,56 @@ class SDNController(BASE_APP):
                     self.mitigation_engine.mitigate_host(host_ip, reason=attack_type)
                     if self.exporter:
                         self.exporter.update_mitigation_active(host_ip, is_active=True)
+
+        # Run live Isolation Forest inference on active IPv4 forwarding flows
+        if self.ml_detector and getattr(self.ml_detector, "is_fitted", False) and flow_features:
+            host_ml_scores: Dict[str, float] = {}
+            host_ml_anomalies: Dict[str, bool] = {}
+            latencies: List[float] = []
+
+            for rec in flow_features:
+                if rec.get("priority", 0) != 1:
+                    continue
+                match = rec.get("match", {})
+                src_ip = match.get("ipv4_src")
+                if not src_ip:
+                    continue
+                feature_vec = [
+                    float(rec.get("packet_rate", 0.0)),
+                    float(rec.get("byte_rate", 0.0)),
+                    float(rec.get("duration_sec", 0.0)),
+                    float(rec.get("packet_count", 0)),
+                    float(rec.get("byte_count", 0)),
+                    float(rec.get("avg_packet_size", 0.0)),
+                ]
+                try:
+                    ml_res = self.ml_detector.predict_flow(feature_vec)
+                    score = ml_res["anomaly_score"]
+                    latencies.append(ml_res["latency_us"])
+                    if src_ip not in host_ml_scores or score > host_ml_scores[src_ip]:
+                        host_ml_scores[src_ip] = score
+                    if ml_res["is_anomaly"]:
+                        host_ml_anomalies[src_ip] = True
+                except Exception as e:
+                    logger.debug(f"ML inference skipped for {src_ip}: {e}")
+
+            avg_latency = (sum(latencies) / len(latencies)) if latencies else 0.0
+            ml_mitigate = bool(self.config.get("detection", {}).get("ml", {}).get("trigger_mitigation", False))
+
+            for src_ip, max_score in host_ml_scores.items():
+                is_ml_anom = host_ml_anomalies.get(src_ip, False)
+                if self.exporter:
+                    self.exporter.update_ml_metrics(src_ip, max_score, avg_latency)
+                    self.exporter.update_anomaly_alert(src_ip, "ml_isolation_forest", is_active=is_ml_anom)
+                if is_ml_anom:
+                    logger.warning(
+                        f"[ML ANOMALY] Host {src_ip} flagged by IsolationForest "
+                        f"(score={max_score:.4f}, latency={avg_latency:.1f}us)"
+                    )
+                    if ml_mitigate and self.mitigation_engine:
+                        self.mitigation_engine.mitigate_host(src_ip, reason="ml_isolation_forest")
+                        if self.exporter:
+                            self.exporter.update_mitigation_active(src_ip, is_active=True)
 
 
 # Interface compatibility alias as specified in PROJECT.md

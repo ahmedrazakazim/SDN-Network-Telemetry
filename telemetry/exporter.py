@@ -173,6 +173,19 @@ class PrometheusTelemetryExporter:
             registry=self.registry
         )
 
+        # ML (Isolation Forest) live inference metrics
+        self.ml_anomaly_score = Gauge(
+            "sdn_ml_anomaly_score",
+            "Real-time Isolation Forest anomaly score per host (positive indicates anomaly)",
+            ["host"],
+            registry=self.registry
+        )
+        self.ml_inference_latency_us = Gauge(
+            "sdn_ml_inference_latency_us",
+            "Isolation Forest per-flow inference latency in microseconds",
+            registry=self.registry
+        )
+
     def start_server(self, port: Optional[int] = None, host: Optional[str] = None) -> bool:
         """
         Start the Prometheus metrics HTTP server on specified port and host.
@@ -279,6 +292,11 @@ class PrometheusTelemetryExporter:
         Update destination port Shannon entropy gauge for host.
         """
         self.host_port_entropy.labels(host=host_ip).set(float(entropy))
+
+    def update_ml_metrics(self, host_ip: str, anomaly_score: float, latency_us: float) -> None:
+        """Update live Isolation Forest anomaly score and inference latency."""
+        self.ml_anomaly_score.labels(host=host_ip).set(float(anomaly_score))
+        self.ml_inference_latency_us.set(float(latency_us))
 
     def update_host_z_score(self, host_ip: str, metric_name: str, z_score: float) -> None:
         """

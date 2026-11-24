@@ -1,0 +1,75 @@
+/home/zen/CN Project/controller/sdn_controller.py:2: EventletDeprecationWarning: 
+Eventlet is deprecated. It is currently being maintained in bugfix mode, and
+we strongly recommend against using it for new projects.
+
+If you are already using Eventlet, we recommend migrating to a different
+framework.  For more detail see
+https://eventlet.readthedocs.io/en/latest/asyncio/migration.html
+
+  import eventlet
+1 RLock(s) were not greened, to fix this error make sure you run eventlet.monkey_patch() before importing any other modules.
+2026-11-24 21:54:36,688 [INFO] os_ken.base.app_manager: loading app os_ken.controller.ofp_handler
+2026-11-24 21:54:36,689 [INFO] os_ken.base.app_manager: loading app controller.sdn_controller
+2026-11-24 21:54:36,689 [INFO] os_ken.base.app_manager: loading app os_ken.controller.ofp_handler
+2026-11-24 21:54:36,689 [INFO] os_ken.base.app_manager: instantiating app os_ken.controller.ofp_handler of OFPHandler
+2026-11-24 21:54:36,689 [INFO] os_ken.base.app_manager: instantiating app controller.sdn_controller of SDNController
+2026-11-24 21:54:36,692 [INFO] SDNController: Loaded configuration from /home/zen/CN Project/configs/sdn_config.yaml
+2026-11-24 21:54:37,504 [INFO] telemetry.exporter: Prometheus telemetry exporter running at http://0.0.0.0:8000/metrics
+2026-11-24 21:54:37,504 [INFO] SDNController: Prometheus telemetry exporter listening at http://0.0.0.0:8000/metrics
+2026-11-24 21:54:37,504 [INFO] SDNController: StatisticalAnomalyDetector initialized and wired to telemetry
+2026-11-24 21:54:37,520 [INFO] SDNController: IsolationForestAnomalyDetector loaded from /home/zen/CN Project/detection/models/isolation_forest.joblib
+2026-11-24 21:54:37,521 [INFO] mitigation_engine: Initialized MitigationEngine (priority=1000, default_timeout=300s, protected_hosts={'10.0.0.4', '10.0.0.3'})
+2026-11-24 21:54:37,521 [INFO] SDNController: MitigationEngine initialized
+2026-11-24 21:54:37,521 [INFO] telemetry.collector: Telemetry polling loop started with interval=1.00s
+2026-11-24 21:54:37,522 [INFO] telemetry.collector: Spawned telemetry monitor greenlet
+2026-11-24 21:54:37,522 [INFO] SDNController: TelemetryCollector registered and polling loop started (interval=1.0s)
+2026-11-24 21:54:37,522 [INFO] SDNController: Initialized SDNController with backend: os_ken
+2026-11-24 21:54:37,944 [INFO] SDNController: Switch connected: DPID=1
+2026-11-24 21:54:37,944 [INFO] controller.flow_manager: Installing table-miss entry on datapath 1
+2026-11-24 21:54:37,944 [INFO] SDNController: Switch connected: DPID=3
+2026-11-24 21:54:37,944 [INFO] controller.flow_manager: Installing table-miss entry on datapath 3
+2026-11-24 21:54:37,944 [INFO] SDNController: Switch connected: DPID=2
+2026-11-24 21:54:37,945 [INFO] controller.flow_manager: Installing table-miss entry on datapath 2
+2026-11-24 21:54:52,586 [WARNING] SDNController: [ANOMALY ALERT] Host 10.0.0.3 anomaly: volumetric_flood (z_pkt=122.1379, entropy=0.0)
+2026-11-24 21:54:52,586 [ERROR] mitigation_engine: Mitigation rejected for 10.0.0.3: host is in protected benign host list ({'10.0.0.4', '10.0.0.3'}). Enforcing non-disruption guarantee.
+2026-11-24 21:54:52,586 [WARNING] SDNController: [ANOMALY ALERT] Host 10.0.0.4 anomaly: volumetric_flood (z_pkt=122.0791, entropy=0.0)
+2026-11-24 21:54:52,586 [ERROR] mitigation_engine: Mitigation rejected for 10.0.0.4: host is in protected benign host list ({'10.0.0.4', '10.0.0.3'}). Enforcing non-disruption guarantee.
+2026-11-24 21:54:53,588 [WARNING] SDNController: [ANOMALY ALERT] Host 10.0.0.1 anomaly: volumetric_flood (z_pkt=31992.9208, entropy=0.0)
+2026-11-24 21:54:53,588 [WARNING] controller.flow_manager: Installing DROP rule on switch 1 for match OFPMatch(oxm_fields={'eth_type': 2048, 'ipv4_src': '10.0.0.1'}) (priority=1000, timeout=300s)
+2026-11-24 21:54:53,589 [WARNING] controller.flow_manager: Installing DROP rule on switch 3 for match OFPMatch(oxm_fields={'eth_type': 2048, 'ipv4_src': '10.0.0.1'}) (priority=1000, timeout=300s)
+2026-11-24 21:54:53,589 [WARNING] controller.flow_manager: Installing DROP rule on switch 2 for match OFPMatch(oxm_fields={'eth_type': 2048, 'ipv4_src': '10.0.0.1'}) (priority=1000, timeout=300s)
+2026-11-24 21:54:53,589 [WARNING] mitigation_engine: Mitigation active: Blocked offending source 10.0.0.1 across 3 switches (reason='volumetric_flood', priority=1000, timeout=300s)
+2026-11-24 21:54:53,589 [WARNING] SDNController: [ANOMALY ALERT] Host 10.0.0.2 anomaly: volumetric_flood (z_pkt=32045.8166, entropy=0.0)
+2026-11-24 21:54:53,589 [WARNING] controller.flow_manager: Installing DROP rule on switch 1 for match OFPMatch(oxm_fields={'eth_type': 2048, 'ipv4_src': '10.0.0.2'}) (priority=1000, timeout=300s)
+2026-11-24 21:54:53,589 [WARNING] controller.flow_manager: Installing DROP rule on switch 3 for match OFPMatch(oxm_fields={'eth_type': 2048, 'ipv4_src': '10.0.0.2'}) (priority=1000, timeout=300s)
+2026-11-24 21:54:53,589 [WARNING] controller.flow_manager: Installing DROP rule on switch 2 for match OFPMatch(oxm_fields={'eth_type': 2048, 'ipv4_src': '10.0.0.2'}) (priority=1000, timeout=300s)
+2026-11-24 21:54:53,589 [WARNING] mitigation_engine: Mitigation active: Blocked offending source 10.0.0.2 across 3 switches (reason='volumetric_flood', priority=1000, timeout=300s)
+2026-11-24 21:54:53,648 [WARNING] SDNController: [ML ANOMALY] Host 10.0.0.1 flagged by IsolationForest (score=0.1199, latency=5814.7us)
+2026-11-24 21:54:53,648 [WARNING] SDNController: [ML ANOMALY] Host 10.0.0.2 flagged by IsolationForest (score=0.1199, latency=5814.7us)
+2026-11-24 21:54:54,655 [WARNING] SDNController: [ANOMALY ALERT] Host 10.0.0.1 anomaly: volumetric_flood (z_pkt=53.6059, entropy=0.0)
+2026-11-24 21:54:54,655 [WARNING] controller.flow_manager: Installing DROP rule on switch 1 for match OFPMatch(oxm_fields={'eth_type': 2048, 'ipv4_src': '10.0.0.1'}) (priority=1000, timeout=300s)
+2026-11-24 21:54:54,655 [WARNING] controller.flow_manager: Installing DROP rule on switch 3 for match OFPMatch(oxm_fields={'eth_type': 2048, 'ipv4_src': '10.0.0.1'}) (priority=1000, timeout=300s)
+2026-11-24 21:54:54,655 [WARNING] controller.flow_manager: Installing DROP rule on switch 2 for match OFPMatch(oxm_fields={'eth_type': 2048, 'ipv4_src': '10.0.0.1'}) (priority=1000, timeout=300s)
+2026-11-24 21:54:54,655 [WARNING] mitigation_engine: Mitigation active: Blocked offending source 10.0.0.1 across 3 switches (reason='volumetric_flood', priority=1000, timeout=300s)
+2026-11-24 21:54:54,655 [WARNING] SDNController: [ANOMALY ALERT] Host 10.0.0.2 anomaly: volumetric_flood (z_pkt=15.8696, entropy=0.0)
+2026-11-24 21:54:54,655 [WARNING] controller.flow_manager: Installing DROP rule on switch 1 for match OFPMatch(oxm_fields={'eth_type': 2048, 'ipv4_src': '10.0.0.2'}) (priority=1000, timeout=300s)
+2026-11-24 21:54:54,655 [WARNING] controller.flow_manager: Installing DROP rule on switch 3 for match OFPMatch(oxm_fields={'eth_type': 2048, 'ipv4_src': '10.0.0.2'}) (priority=1000, timeout=300s)
+2026-11-24 21:54:54,656 [WARNING] controller.flow_manager: Installing DROP rule on switch 2 for match OFPMatch(oxm_fields={'eth_type': 2048, 'ipv4_src': '10.0.0.2'}) (priority=1000, timeout=300s)
+2026-11-24 21:54:54,656 [WARNING] mitigation_engine: Mitigation active: Blocked offending source 10.0.0.2 across 3 switches (reason='volumetric_flood', priority=1000, timeout=300s)
+2026-11-24 21:54:54,722 [WARNING] SDNController: [ML ANOMALY] Host 10.0.0.1 flagged by IsolationForest (score=0.1546, latency=6601.4us)
+2026-11-24 21:54:54,722 [WARNING] SDNController: [ML ANOMALY] Host 10.0.0.2 flagged by IsolationForest (score=0.1546, latency=6601.4us)
+2026-11-24 21:54:55,594 [WARNING] SDNController: [ANOMALY ALERT] Host 10.0.0.1 anomaly: volumetric_flood (z_pkt=3.3357, entropy=0.0)
+2026-11-24 21:54:55,594 [WARNING] controller.flow_manager: Installing DROP rule on switch 1 for match OFPMatch(oxm_fields={'eth_type': 2048, 'ipv4_src': '10.0.0.1'}) (priority=1000, timeout=300s)
+2026-11-24 21:54:55,594 [WARNING] controller.flow_manager: Installing DROP rule on switch 3 for match OFPMatch(oxm_fields={'eth_type': 2048, 'ipv4_src': '10.0.0.1'}) (priority=1000, timeout=300s)
+2026-11-24 21:54:55,594 [WARNING] controller.flow_manager: Installing DROP rule on switch 2 for match OFPMatch(oxm_fields={'eth_type': 2048, 'ipv4_src': '10.0.0.1'}) (priority=1000, timeout=300s)
+2026-11-24 21:54:55,594 [WARNING] mitigation_engine: Mitigation active: Blocked offending source 10.0.0.1 across 3 switches (reason='volumetric_flood', priority=1000, timeout=300s)
+2026-11-24 21:54:55,661 [WARNING] SDNController: [ML ANOMALY] Host 10.0.0.1 flagged by IsolationForest (score=0.0964, latency=6634.5us)
+2026-11-24 21:54:55,661 [WARNING] SDNController: [ML ANOMALY] Host 10.0.0.2 flagged by IsolationForest (score=0.0964, latency=6634.5us)
+2026-11-24 21:54:56,706 [WARNING] SDNController: [ML ANOMALY] Host 10.0.0.1 flagged by IsolationForest (score=0.0959, latency=5606.5us)
+2026-11-24 21:54:56,706 [WARNING] SDNController: [ML ANOMALY] Host 10.0.0.2 flagged by IsolationForest (score=0.0959, latency=5606.5us)
+2026-11-24 21:54:57,653 [WARNING] SDNController: [ML ANOMALY] Host 10.0.0.1 flagged by IsolationForest (score=0.0989, latency=5867.9us)
+2026-11-24 21:54:57,654 [WARNING] SDNController: [ML ANOMALY] Host 10.0.0.2 flagged by IsolationForest (score=0.0989, latency=5867.9us)
+2026-11-24 21:54:58,646 [WARNING] SDNController: [ML ANOMALY] Host 10.0.0.1 flagged by IsolationForest (score=0.1013, latency=5546.5us)
+2026-11-24 21:54:58,646 [WARNING] SDNController: [ML ANOMALY] Host 10.0.0.2 flagged by IsolationForest (score=0.1013, latency=5546.5us)
+2026-11-24 21:54:59,730 [WARNING] SDNController: [ML ANOMALY] Host 10.0.0.1 flagged by IsolationForest (score=0.1060, latency=7174.9us)
+2026-11-24 21:54:59,730 [WARNING] SDNController: [ML ANOMALY] Host 10.0.0.2 flagged by IsolationForest (score=0.1060, latency=7174.9us)
